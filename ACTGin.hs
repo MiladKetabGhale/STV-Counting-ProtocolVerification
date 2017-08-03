@@ -1,5 +1,5 @@
 {-- ACT Ginninderra 2008 --}
-module ACTGin where
+module Candidates where
 import Lib as L
 
 filename :: String
