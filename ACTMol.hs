@@ -1,5 +1,5 @@
 {--ACT Molonglo 2008 --}
-module ACTMol where
+module Candidates where
 import Lib as L
 
 filename :: String
