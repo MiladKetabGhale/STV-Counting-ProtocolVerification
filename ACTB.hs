@@ -1,5 +1,5 @@
 {--ACT Brindabella 2012--}
-module ACTB where
+module Candidates where
 import Lib as L
 
 filename :: String
