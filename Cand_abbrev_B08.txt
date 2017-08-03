@@ -1,0 +1,21 @@
+RAYAudrey --> RAR
+JEFFERYVal --> JEV
+SIZERJames --> SIJ
+McLACHLANBrian --> MLB
+BRESNANAmanda --> BRA
+GENTLEMANMick --> GEM
+SMYTHBrendan --> SMB
+RAKEGeoff --> RAG
+RITCHIEBruce --> RIB
+DOBLEBen --> DBB
+DOBLEBurl --> DOB
+SZPOTSteve --> SZS
+PRATTSteve --> PRS
+ELLERMANSue --> ELS
+MACKEYTracy --> MAT
+SIEVERSWayne --> SIW
+HARGREAVESJohn --> HAJ
+BURCHJoy --> BUJ
+MORGANDavid --> MOD
+
+
