@@ -1,5 +1,7 @@
 Source files for the paper 
   "A Formally Verified Single Transferable Vote Scheme with Fraction Values"
+               Milad K. Ghale, Rajeev Gore', Dirk Pattinson
+                  Research School of Computer Science ANU
 
 Dependencies :
 
