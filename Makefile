@@ -11,8 +11,6 @@ Main : Main.hs Lib.hs
 small : Candidates_Small.hs Main.hs Lib.hs
 	cp Candidates_Small.hs Candidates.hs; ghc -o small Main.hs
 	
-act : Candidates_ACT.hs Main.hs Lib.hs
-	cp Candidates_ACT.hs Candidates.hs; ghc Candidates.hs; ghc -o act Main.hs
 
 actbri : ACTBri.hs Main.hs Lib.hs
 	cp ACTBri.hs Candidates.hs; ghc -o actbri Main.hs
