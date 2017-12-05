@@ -7,6 +7,8 @@ import Lib as L
 import System.IO
 import Data.List.Split as LS
 import Candidates
+import Data.Ratio
+
 
 
 hTcl :: [a] -> List a
@@ -33,10 +35,10 @@ h2cProd :: (List cand, Q) -> Prod (List cand) Q
 h2cProd ( l, p) = Pair l p
 
 {--pair of list and rationals in Coq to haskell pair of list and double--}
-prodC2h :: (Prod (List a) Q) -> ([a], Double)
-prodC2h (Pair l b) = (c2hl l, approx_frac . c2hQ $ b)
+--prodC2h :: (Prod (List a) Q) -> ([a], Ratio a)
+prodC2h (Pair l b) = (c2hl l, c2hRatio $ b)
 
-listBallot_listQ :: [(Prod (List a) Q)] -> [ ([a],Double) ]
+--listBallot_listQ :: [(Prod (List a) Q)] -> [ ([a],Double) ]
 listBallot_listQ l = P.map prodC2h l
 
 {--decimal to binary representation--}
@@ -74,6 +76,8 @@ zToInt (Zpos q) = pos_Int $ bintoDec q
 c2hQ (Qmake a b) = fromIntegral (zToInt a) / fromIntegral (pos_Int $ bintoDec b)
 
 
+c2hRatio (Qmake a b) = (fromIntegral (zToInt a)) % 
+                       (fromIntegral (pos_Int $ bintoDec b))
 {- visualisation -}
 instance(Show L.Bool) where 
  show (L.True) = "true"
@@ -106,8 +110,8 @@ instance (Show Q) where
 instance (Show a) => (Show (Prod (List a) Q)) where
  show (Pair c b) = "(" ++ (show $ c2hl c) 
                    ++ "," 
-                   ++ (show $ approx_frac . c2hQ $ b) ++ ")"
-
+                  -- ++ (show $ approx_frac . c2hQ $ b) ++ ")"
+                   ++ (show $ c2hRatio $ b) ++ ")"
 instance (Show a, Show b) => (Show (Prod a (Cand -> b))) where
  show (Pair d e) = (show d) ++ (show e)
 
@@ -118,17 +122,20 @@ instance (Show a) => (Show (Prod () a)) where
  show (Pair _ c) = show c
 
 instance (Show a, Show b) => Show (SigT a b) where
- show (ExistT x p) = (show p) ++ "\n" ++ (show x) 
+ show (ExistT x p) = (show x) ++ "\n" ++ (show p) 
 
 instance Show (FT_Judgement Cand) where
-   show(Winners l) = (P.take 60 (cycle "-")) 
-                   ++ "\n" ++ "winners" ++ show (c2hl l) 
-   show (State (Pair (Pair (Pair (Pair (Pair (Pair a0 a1) a2) b) c) d) e)) = (P.take 60 (cycle "-")) 
-                   ++ "\n" 
+   show(Winners l) = --(P.take 60 (cycle "-")) 
+                   {--++ "\n" ++ "winners" ++ --} show (c2hl l) 
+   show (State (Pair (Pair (Pair (Pair (Pair (Pair a0 a1) a2) b) c) d) e)) = 
+                   --(P.take 60 (cycle "-")) 
+                  {-- ++"\n"
                    ++ "state" ++ " " 
-                   ++ (show $ c2hl a0) 
+                   ++ --}
+                      (show $ c2hl a0) 
                    ++ ";"++" " 
-                   ++ (show (approx_frac . c2hQ .a1)) 
+                  -- ++ (show (approx_frac . c2hQ .a1)) 
+                   ++ (show $ c2hRatio . a1)
                    ++ ";"++ " " 
                    ++ (show (listBallot_listQ . c2hl. a2)) 
                    ++ ";" ++ " " 
@@ -136,19 +143,24 @@ instance Show (FT_Judgement Cand) where
                    ++ ";" ++ " " 
                    ++ (show (c2hl c)) 
                    ++";" ++ " " 
-                   ++  (show (c2hl d)) ++ ", " 
-                   ++ "quota =" ++ " " ++ (show $ approx_frac . c2hQ $ e) 
+                   ++  (show (c2hl d)) 
+              --     ++ "quota =" ++ " " ++ (show $ c2hRatio $ e) 
    show (Initial l)= 
-                  "initial::" ++ " " ++ "total ballots:=" 
-                  ++ (show $ c2hn $ L.length l) 
-                  ++ ", " ++ "formal ballots:=" ++ " " 
-                  ++ (show $ (c2hn $ L.length $ L.filter cand_eq_dec l)) 
-                  ++ ", " ++ "number of seats:=" ++ " " 
-                  ++ (show $ c2hn st) 
+              --    "initial::" ++ " " ++ "total ballots:=" 
+              --    ++ (show $ c2hn $ L.length l) 
+              --    ++ ", " ++ "formal ballots:=" ++ " " 
+              --    ++ (show $ (c2hn $ L.length $ L.filter cand_eq_dec l)) 
+              --    ++ ", " ++ "number of seats:=" ++ " " 
+              --    ++ (show $ c2hn st) ++ "\n" ++ 
+                     (show $ 
+                     ((fromIntegral (c2hn $ L.length $ L.filter cand_eq_dec l)) % 
+                     (fromIntegral (1+ (c2hn st)))) + (1 % 1))
+                                      ++ "\n" ++ (show $ c2hn st) 
+                                      ++ "\n" ++ (show $ c2hl $ cand_all) 
 
 instance (Show (Pf (FT_Judgement Cand))) where
          show (Ax a) = ""
-         show (Mkp a j (p)) = show (p) ++ "\n" ++ show (j)
+         show (Mkp a j (p)) = show (j) ++ "\n" ++ show (p)
 
 instance (Show a) => Show (Cand -> a) where
   show f = show_l (c2hl cand_all) where
